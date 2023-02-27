@@ -2,7 +2,7 @@
   <v-toolbar 
   density="compact"
   height="100"
-  class="gradient mb-5">
+  class="gradient mb-3">
     <v-toolbar-title>
     <v-img
       src="@/assets/logo.png"

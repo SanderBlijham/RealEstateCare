@@ -1,5 +1,5 @@
 <template>
-  <v-bottom-navigation bg-color="accent" height="75">
+  <v-bottom-navigation bg-color="accent">
     <v-btn value="active task">
       <v-icon>mdi-tools</v-icon>
 
