@@ -28,6 +28,15 @@
           <td>Omschrijving:</td>
           <td>{{ damage.description }}</td>
         </tr>
+        <tr>
+          <td v-for="image in damage.image" :key="image.id">
+            <img  
+              :src="getNewDamageUrl(inspection.id, damage.id, image.id, image.img)"
+              :alt="damage.id"
+              class="img-fluid"
+            />
+          </td>
+        </tr>
       </tbody>
     </v-table>
   </v-list>
@@ -54,6 +63,15 @@
         <tr>
           <td>Kostenindicatie:</td>
           <td>{{ damage.costIndication }}</td>
+        </tr>
+        <tr>
+          <td v-for="image in damage.image" :key="image.id">
+            <img  
+              :src="getOverdueUrl(inspection.id, damage.id, image.id, image.img)"
+              :alt="damage.id"
+              class="img-fluid"
+            />
+          </td>
         </tr>
       </tbody>
     </v-table>
@@ -94,6 +112,15 @@
           <td>Opmerkingen:</td>
           <td>{{ damage.description }}</td>
         </tr>
+        <tr>
+          <td v-for="image in damage.image" :key="image.id">
+            <img  
+              :src="getTechnicalUrl(inspection.id, damage.id, image.id, image.img)"
+              :alt="damage.id"
+              class="img-fluid"
+            />
+          </td>
+        </tr>
       </tbody>
     </v-table>
   </v-list>
@@ -130,28 +157,39 @@
           <td>Opmerkingen:</td>
           <td>{{ damage.description }}</td>
         </tr>
+        <tr>
+          <td v-for="image in damage.image" :key="image.id">
+            <img  
+              :src="getModificationUrl(inspection.id, damage.id, image.id, image.img)"
+              :alt="damage.id"
+              class="img-fluid"
+            />
+          </td>
+        </tr>
       </tbody>
     </v-table>
   </v-list>
 </template>
 
 <script>
+import mixins from '../mixins/mixins';
+
 export default {
   name: "InspectionDetail",
   props: ["inspection"],
-  methods: {
-    getPDFMods(index, pdf) {
-      return ("../src/assets/modifications/" + index + "/" + pdf);
-    },
-    getPDFTests(index, pdf) {
-      return ("../src/assets/testProcedures/" + index + "/" + pdf);
-    },
-  },
+  mixins: [mixins],
 };
 </script>
 
 <style scoped>
 td {
   width: 50%;
+}
+
+img {
+
+  width: 50%;
+  aspect-ratio: 1/1;  
+
 }
 </style>
