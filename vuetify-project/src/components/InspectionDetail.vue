@@ -1,5 +1,5 @@
 <template>
-  <h2>{{ inspection.user }}</h2>
+  <v-card-title>{{ inspection.user }}</v-card-title>
   <v-list v-for="damage in inspection.recordDamage" :key="damage.id">
     <v-list-subheader>Schade</v-list-subheader>
     <v-table>
@@ -18,7 +18,7 @@
         </tr>
         <tr>
           <td>Datum:</td>
-          <td>{{ damage.date }}</td>
+          <td>{{ formatDate(damage.date) }}</td>
         </tr>
         <tr>
           <td>Acute actie vereist:</td>
@@ -178,6 +178,13 @@ export default {
   name: "InspectionDetail",
   props: ["inspection"],
   mixins: [mixins],
+  methods: {
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return date.toLocaleDateString('nl-NL', options);
+    }
+  },
 };
 </script>
 

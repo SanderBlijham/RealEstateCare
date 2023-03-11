@@ -4,12 +4,14 @@
   height="100"
   class="gradient mb-3">
     <v-toolbar-title>
+    <router-link to="/" class="text-decoration-none">
     <v-img
       src="@/assets/logo.png"
       width="200"
       height="200"
       contain
     ></v-img>
+  </router-link>
   </v-toolbar-title>
 
     <v-spacer></v-spacer>

@@ -28,6 +28,7 @@
     <v-col cols="6" 
     md="3">
       <v-hover v-slot="{ isHovering, props }">
+        <router-link to="completed" class="text-decoration-none">
         <v-card
           icon
           :elevation="isHovering ? 16 : 2"
@@ -45,6 +46,7 @@
           class="d-flex justify-center align-center text-logo mt-10"
           >Completed</h3>
         </v-card>
+      </router-link>
       </v-hover>
     </v-col>
 

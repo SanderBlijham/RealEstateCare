@@ -1,20 +1,19 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router'
 
+import HomePage from '@/views/HomePage.vue'
+import InspectionList from '@/views/CompletedInspections.vue'
+
 const routes = [
   {
     path: '/',
-    component: () => import('@/views/HomePage.vue'),
-    children: [
-      {
-        path: '',
-        name: 'Home',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "home" */ '@/views/HomePage.vue'),
-      },
-    ],
+    name: 'home',
+    component: HomePage,
+  },
+  {
+    path: '/completed',
+    name: 'completed',
+    component: InspectionList,
   },
 ]
 

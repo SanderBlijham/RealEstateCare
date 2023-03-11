@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="4">
+    <v-col cols="12" md="4">
       <v-card class="ma-5 pa-2">
         <v-list>
           <v-list-subheader>Uitgevoerde inspecties</v-list-subheader>
@@ -8,7 +8,7 @@
           <v-list-item
             @click="selectInspection(index)"
             v-for="(inspection, index) in inspectionsData.inspection"
-            v-bind:key="inspection.id"
+            :key="inspection.id"
             active-color="primary"
             rounded="shaped"
           >
@@ -19,11 +19,14 @@
             <v-list-item-title>
               {{ inspection.id }} - {{ inspection.user.toUpperCase() }}
             </v-list-item-title>
+            <v-list-item-subtitle>
+              {{ formatDate(inspection.date) }}
+            </v-list-item-subtitle>
           </v-list-item>
         </v-list>
       </v-card>
     </v-col>
-      <v-col cols="8">
+    <v-col cols="12" md="8">
       <v-card class="ma-5 pa-2">
         <InspectionDetail
           v-if="selectedInspection"
@@ -35,7 +38,7 @@
 </template>
 
 <script>
-import inspectionsData from "../services/inspectionsData";
+import EventService from "@/services/EventService";
 import InspectionDetail from "./InspectionDetail";
 
 export default {
@@ -43,17 +46,34 @@ export default {
   components: { InspectionDetail },
   data() {
     return {
-      inspectionsData,
+      inspectionsData: { inspection: [] },
       selectedInspectionIndex: 0,
     };
   },
   created() {
-    console.log(this.inspectionsData);
+    EventService.getPage("/inspection")
+      .then((response) => {
+        response.data.inspection.sort((a, b) => {
+          if (a.date < b.date) return 1;
+          if (a.date > b.date) return -1;
+          return 0;
+        });
+        this.inspectionsData = response.data
+        console.log(this.inspectionsData);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
   methods: {
     selectInspection(index) {
       this.selectedInspectionIndex = index;
     },
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return date.toLocaleDateString('nl-NL', options);
+    }
   },
   computed: {
     selectedInspection() {
