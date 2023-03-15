@@ -7,7 +7,7 @@
 
           <v-list-item
             @click="selectInspection(index)"
-            v-for="(inspection, index) in inspectionsData.inspection"
+            v-for="(inspection, index) in inspectionsData"
             :key="inspection.id"
             active-color="primary"
             rounded="shaped"
@@ -40,25 +40,28 @@
 <script>
 import EventService from "@/services/EventService";
 import InspectionDetail from "./InspectionDetail";
+import inspectionsDatamodel from "@/models/inspectionsData";
 
 export default {
   name: "InspectionList",
   components: { InspectionDetail },
   data() {
     return {
-      inspectionsData: { inspection: [] },
+      inspectionsData: [],
       selectedInspectionIndex: 0,
     };
   },
   created() {
-    EventService.getPage("/inspection")
+    EventService.getPage("/inspections")
       .then((response) => {
-        response.data.inspection.sort((a, b) => {
+        response.data.inspections.sort((a, b) => {
           if (a.date < b.date) return 1;
           if (a.date > b.date) return -1;
           return 0;
         });
-        this.inspectionsData = response.data
+        const data = response.data.inspections
+        this.inspectionsData = data.map(data => new inspectionsDatamodel(data));
+        console.log(data);
         console.log(this.inspectionsData);
       })
       .catch((error) => {
@@ -78,7 +81,7 @@ export default {
   computed: {
     selectedInspection() {
       return {
-        ...this.inspectionsData.inspection[this.selectedInspectionIndex],
+        ...this.inspectionsData[this.selectedInspectionIndex],
       };
     },
   },

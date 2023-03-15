@@ -1,6 +1,6 @@
 <template>
   <v-card-title>{{ inspection.user }}</v-card-title>
-  <v-list v-for="damage in inspection.recordDamage" :key="damage.id">
+  <v-list v-for="damage in inspection.damageRecords" :key="damage.id">
     <v-list-subheader>Schade</v-list-subheader>
     <v-table>
       <tbody>
@@ -29,7 +29,7 @@
           <td>{{ damage.description }}</td>
         </tr>
         <tr>
-          <td v-for="image in damage.image" :key="image.id">
+          <td v-for="image in damage.images" :key="image.id">
             <img  
               :src="getNewDamageUrl(inspection.id, damage.id, image.id, image.img)"
               :alt="damage.id"
@@ -42,7 +42,7 @@
   </v-list>
 
   <v-list
-    v-for="damage in inspection.recordOverdueMaintenance"
+    v-for="damage in inspection.overdueMaintenanceRecords"
     :key="damage.id"
   >
     <v-list-subheader>Achterstallig onderhoud</v-list-subheader>
@@ -65,7 +65,7 @@
           <td>{{ damage.costIndication }}</td>
         </tr>
         <tr>
-          <td v-for="image in damage.image" :key="image.id">
+          <td v-for="image in damage.images" :key="image.id">
             <img  
               :src="getOverdueUrl(inspection.id, damage.id, image.id, image.img)"
               :alt="damage.id"
@@ -78,7 +78,7 @@
   </v-list>
 
   <v-list
-    v-for="damage in inspection.inspectTechnicalInstallations"
+    v-for="damage in inspection.technicalInstallationsinspections"
     :key="damage.id"
   >
     <v-list-subheader>Technische installaties inspecteren</v-list-subheader>
@@ -113,7 +113,7 @@
           <td>{{ damage.description }}</td>
         </tr>
         <tr>
-          <td v-for="image in damage.image" :key="image.id">
+          <td v-for="image in damage.images" :key="image.id">
             <img  
               :src="getTechnicalUrl(inspection.id, damage.id, image.id, image.img)"
               :alt="damage.id"
@@ -158,7 +158,7 @@
           <td>{{ damage.description }}</td>
         </tr>
         <tr>
-          <td v-for="image in damage.image" :key="image.id">
+          <td v-for="image in damage.images" :key="image.id">
             <img  
               :src="getModificationUrl(inspection.id, damage.id, image.id, image.img)"
               :alt="damage.id"
