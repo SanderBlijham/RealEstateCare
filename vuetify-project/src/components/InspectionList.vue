@@ -27,46 +27,101 @@
       </v-card>
     </v-col>
     <v-col cols="12" md="8">
-      <v-card class="ma-5 pa-2">
-        <InspectionDetail
-          v-if="selectedInspection"
-          :inspection="selectedInspection"
-        />
+      <v-card class="mt-5">
+        <v-card-title
+          >Inspectieformulier van {{ selectedInspection.user }}</v-card-title
+        >
+        <v-expansion-panels
+        variant="default">
+          <v-expansion-panel
+            v-if="selectedInspection.damageRecords"
+            :disabled="false"
+            class="pa-2"
+          >
+            <v-expansion-panel-title>Schade</v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <damageRecords
+                v-if="selectedInspection"
+                :inspection="selectedInspection"
+              />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+
+          <v-expansion-panel
+            v-if="selectedInspection.overdueMaintenanceRecords"
+            :disabled="false"
+            class="pa-2"
+          >
+            <v-expansion-panel-title
+              >Achterstallig onderhoud</v-expansion-panel-title
+            >
+            <v-expansion-panel-text>
+              <overdueMaintenanceRecords
+                v-if="selectedInspection"
+                :inspection="selectedInspection"
+              />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+
+          <v-expansion-panel
+            v-if="selectedInspection.technicalInstallationInspections"
+            :disabled="false"
+            class="pa-2"
+          >
+            <v-expansion-panel-title
+              >Technische installaties inspecteren</v-expansion-panel-title
+            >
+            <v-expansion-panel-text>
+              <technicalInstallationInspections
+                v-if="selectedInspection"
+                :inspection="selectedInspection"
+              />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+
+          <v-expansion-panel
+            class="pa-2"
+            v-if="selectedInspection.identifyModifications"
+            :disabled="false"
+          >
+            <v-expansion-panel-title
+              >Modificaties identificeren</v-expansion-panel-title
+            >
+            <v-expansion-panel-text>
+              <identifyModifications
+                v-if="selectedInspection"
+                :inspection="selectedInspection"
+              />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+        </v-expansion-panels>
       </v-card>
     </v-col>
   </v-row>
 </template>
 
 <script>
-import EventService from "@/services/EventService";
-import InspectionDetail from "./InspectionDetail";
-import inspectionsDatamodel from "@/models/inspectionsData";
+import damageRecords from "./damageRecords";
+import overdueMaintenanceRecords from "./overdueMaintenanceRecords";
+import technicalInstallationInspections from "./technicalInstallationInspections";
+import identifyModifications from "./identifyModifications";
 
 export default {
   name: "InspectionList",
-  components: { InspectionDetail },
+  components: {
+    damageRecords,
+    overdueMaintenanceRecords,
+    technicalInstallationInspections,
+    identifyModifications,
+  },
   data() {
     return {
-      inspectionsData: [],
       selectedInspectionIndex: 0,
     };
   },
   created() {
-    EventService.getPage("/inspections")
-      .then((response) => {
-        response.data.inspections.sort((a, b) => {
-          if (a.date < b.date) return 1;
-          if (a.date > b.date) return -1;
-          return 0;
-        });
-        const data = response.data.inspections
-        this.inspectionsData = data.map(data => new inspectionsDatamodel(data));
-        console.log(data);
-        console.log(this.inspectionsData);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    this.$store.dispatch("fetchInspection");
+    console.log(this.inspectionsData);
   },
   methods: {
     selectInspection(index) {
@@ -74,15 +129,24 @@ export default {
     },
     formatDate(dateString) {
       const date = new Date(dateString);
-      const options = { year: 'numeric', month: 'long', day: 'numeric' };
-      return date.toLocaleDateString('nl-NL', options);
-    }
+      const options = { year: "numeric", month: "long", day: "numeric" };
+      return date.toLocaleDateString("nl-NL", options);
+    },
   },
   computed: {
     selectedInspection() {
       return {
         ...this.inspectionsData[this.selectedInspectionIndex],
       };
+    },
+    inspectionsData() {
+      return this.$store.state.inspectionsData;
+    },
+    error() {
+      return this.$store.state.errors.length > 0;
+    },
+    errorList() {
+      return this.$store.state.errors;
     },
   },
 };
