@@ -11,3 +11,5 @@
   import DefaultCards from '@/components/HomeCards.vue'
   import DefaultBottomBar from '@/layouts\\default/BottomBar.vue'
 </script>
+
+

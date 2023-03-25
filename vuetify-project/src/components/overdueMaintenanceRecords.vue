@@ -71,7 +71,7 @@
         </v-img>
       </v-card>
       <v-file-input
-        v-model="image"
+        v-model="imageNew"
         accept="image/png, image/jpeg, image/bmp, image/jpg"
         placeholder="Kies een afbeelding"
         prepend-icon="mdi-camera"

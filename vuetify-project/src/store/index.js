@@ -1,5 +1,6 @@
 // store/index.js
 import { createStore } from "vuex";
+import createPersistedState from "vuex-plugin-persistedstate";
 import EventService from "@/services/EventService";
 import inspectionsDatamodel from "@/models/inspectionsData";
 
@@ -7,7 +8,7 @@ export default createStore({
   state: {
     inspectionsData: [],
     errors: [],
-    images: [], 
+    images: [],
   },
   mutations: {
     SET_INSPECTIONS(state, payload) {
@@ -16,18 +17,17 @@ export default createStore({
     ADD_ERROR(state, payload) {
       state.errors = [...state.errors, payload];
     },
-      addImage (state, images) {
-       state.images.push(images)
-     }
-
+    addImage(state, images) {
+      state.images.push(images);
+    },
   },
   actions: {
     fetchInspection(context) {
       EventService.getPage("/inspections")
         .then((response) => {
           response.data.inspections.sort((a, b) => {
-            if (a.date < b.date) return 1;
-            if (a.date > b.date) return -1;
+            if (a.dateAssignment < b.dateAssignment) return 1;
+            if (a.dateAssignment > b.dateAssignment) return -1;
             return 0;
           });
           const data = response.data.inspections;
@@ -40,4 +40,5 @@ export default createStore({
         });
     },
   },
+  plugins: [createPersistedState()],
 });

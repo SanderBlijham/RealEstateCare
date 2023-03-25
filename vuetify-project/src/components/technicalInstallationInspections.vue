@@ -1,5 +1,8 @@
 <template>
-  <v-list v-for="damage in inspection.technicalInstallationInspections" :key="damage.id">
+  <v-list
+    v-for="damage in inspection.technicalInstallationInspections"
+    :key="damage.id"
+  >
     <v-text-field
       v-model="damage.location"
       class="mt-2"
@@ -27,7 +30,6 @@
     <v-text-field
       v-model="damage.approved"
       class="mt-2"
-      type="datetime-local"
       variant="underlined"
       clearable
       hide-details="auto"
@@ -41,7 +43,10 @@
       hide-details="auto"
       label="Omschrijving:"
     ></v-text-field>
-
+    <div class="div">Test procedure: <a :href="getPDFTests(inspection.id, damage.test)" download>
+       {{ damage.test }}
+    </a></div>
+    
     <v-card>
       <v-img
         v-for="image in damage.images"
@@ -71,7 +76,7 @@
         </v-img>
       </v-card>
       <v-file-input
-        v-model="image"
+        v-model="imageNew"
         accept="image/png, image/jpeg, image/bmp, image/jpg"
         placeholder="Kies een afbeelding"
         prepend-icon="mdi-camera"
@@ -94,7 +99,7 @@ export default {
   props: ["inspection"],
   data() {
     return {
-      imagePreview: ""
+      imagePreview: "",
     };
   },
   mixins: [mixins],
@@ -114,7 +119,7 @@ export default {
           reader.readAsDataURL(f);
         });
       const data = await readData(file);
-      this.$store.commit('addImage', data);
+      this.$store.commit("addImage", data);
       console.log(this.images);
     },
     deleteImage(index) {
@@ -124,6 +129,14 @@ export default {
   computed: {
     images() {
       return this.$store.state.images;
-    }},
+    },
+  },
 };
 </script>
+
+<style scope>
+.div {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+</style>

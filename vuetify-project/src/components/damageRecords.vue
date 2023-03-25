@@ -24,15 +24,33 @@
       hide-details="auto"
       label="Soort schade:"
     ></v-text-field>
-    <v-text-field
-      v-model="damage.date"
-      class="mt-2"
-      type="datetime-local"
-      variant="underlined"
-      clearable
-      hide-details="auto"
-      label="Datum:"
-    ></v-text-field>
+    <v-menu
+      ref="menu1"
+      v-model="menu1"
+      :close-on-content-click="false"
+      transition="scale-transition"
+      offset-y
+      max-width="290px"
+      min-width="290px"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-text-field
+          v-model="dateFormatted"
+          label="Date"
+          hint="MM/DD/YYYY format"
+          persistent-hint
+          prepend-icon="event"
+          v-bind="attrs"
+          @blur="date = parseDate(dateFormatted)"
+          v-on="on"
+        ></v-text-field>
+      </template>
+      <v-date-picker
+        v-model="date"
+        no-title
+        @input="menu1 = false"
+      ></v-date-picker>
+    </v-menu>
     <v-text-field
       v-model="damage.immediateAction"
       class="mt-2"
@@ -79,7 +97,7 @@
         </v-img>
       </v-card>
       <v-file-input
-        v-model="image"
+        v-model="imageNew"
         accept="image/png, image/jpeg, image/bmp, image/jpg"
         placeholder="Kies een afbeelding"
         prepend-icon="mdi-camera"
@@ -102,7 +120,13 @@ export default {
   props: ["inspection"],
   data() {
     return {
-      imagePreview: ""
+      imagePreview: "",
+      data: (vm) => ({
+        date: new Date().toISOString().substr(0, 10),
+        dateFormatted: vm.formatDate2(new Date().toISOString().substr(0, 10)),
+        menu1: false,
+        menu2: false,
+      }),
     };
   },
   mixins: [mixins],
@@ -111,6 +135,18 @@ export default {
       const date = new Date(dateString);
       const options = { year: "numeric", month: "long", day: "numeric" };
       return date.toLocaleDateString("nl-NL", options);
+    },
+    formatDate2(date) {
+      if (!date) return null;
+
+      const [year, month, day] = date.split("-");
+      return `${month}/${day}/${year}`;
+    },
+    parseDate(date) {
+      if (!date) return null;
+
+      const [month, day, year] = date.split("/");
+      return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
     },
     async selectImage(e) {
       const file = e.target.files[0];
@@ -122,7 +158,7 @@ export default {
           reader.readAsDataURL(f);
         });
       const data = await readData(file);
-      this.$store.commit('addImage', data);
+      this.$store.commit("addImage", data);
       console.log(this.images);
     },
     deleteImage(index) {
@@ -132,6 +168,14 @@ export default {
   computed: {
     images() {
       return this.$store.state.images;
-    }},
+    },
+    computedDateFormatted() {
+      return this.formatDate(this.date);
+    },
+  },
+  watch: {
+      date (val) {
+        this.dateFormatted = this.formatDate(this.date)
+      }}
 };
 </script>

@@ -12,5 +12,5 @@ const apiClient = axios.create({
 export default {
     getPage(subURL){
         return apiClient.get(subURL)
-    }
+    },
 }

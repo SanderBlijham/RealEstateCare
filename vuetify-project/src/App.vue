@@ -2,6 +2,10 @@
   <router-view />
 </template>
 
-<script setup>
-  //
+<script>
+  export default {
+    created() {
+    this.$store.dispatch("fetchInspection");
+    console.log(this.inspectionsData);
+  }}
 </script>
