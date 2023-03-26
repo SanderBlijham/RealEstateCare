@@ -29,7 +29,9 @@
     <v-text-field
       v-model="damage.date"
       class="mt-2"
-      type="date"
+      @change=damageIndex(index)
+      :value="formatDate(damage.date)"
+      :type="inputType"
       variant="underlined"
       clearable
       hide-details="auto"
@@ -99,7 +101,8 @@ export default {
   props: ["inspection"],
   data() {
     return {
-      imagePreview: "",
+    //  inputType: "date",
+    selectedDamageIndex: 0,
     };
   },
   mixins: [mixins],
@@ -108,6 +111,9 @@ export default {
       const date = new Date(dateString);
       const options = { year: "numeric", month: "long", day: "numeric" };
       return date.toLocaleDateString("nl-NL", options);
+    },
+    damageIndex(index) {
+      this.selectedDamageIndex = index;
     },
     async selectImage(e, index) {
       const file = e.target.files[0];
@@ -134,6 +140,9 @@ export default {
   computed: {
     inspectionsIndex() {
       return this.$store.getters.getIndexById(this.inspection.id);
+    },
+    inputType() {
+      return this.inspection.damageRecords[this.selectedDamageIndex].date === null ? "date" : "text";
     },
   },
 };
