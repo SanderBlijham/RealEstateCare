@@ -14,12 +14,8 @@
     "core-js": "^3.8.3",
     "moment": "^2.29.4",
     "roboto-fontface": "*",
-    "v-mask": "^2.3.0",
     "vue": "^3.2.13",
     "vue-router": "^4.0.0",
-    "vuetify": "^3.0.0",
-    "vuetify-datetime-picker": "^2.1.1",
-    "vuetify-mask": "^1.1.2",
     "vuex": "^4.1.0",
     "vuex-plugin-persistedstate": "^1.0.6",
     "webfontloader": "^1.0.0"

@@ -1,5 +1,5 @@
 <template>
-  <v-list v-for="damage in inspection.damageRecords" :key="damage.id">
+  <v-list v-for="(damage, index) in inspection.damageRecords" :key="damage.id">
     <v-text-field
       v-model="damage.location"
       class="mt-2"
@@ -8,60 +8,42 @@
       hide-details="auto"
       label="Locatie"
     ></v-text-field>
-    <v-text-field
-      v-model="damage.newDamage"
-      class="mt-2"
-      variant="underlined"
-      clearable
-      hide-details="auto"
-      label="Nieuwe schade:"
-    ></v-text-field>
-    <v-text-field
+    <v-radio-group inline v-model="damage.newDamage" class="mt-2">
+      <v-list-item-subtitle class="mt-3">Nieuwe schade:</v-list-item-subtitle>
+      <v-radio label="Ja" value="Ja"></v-radio>
+      <v-radio label="Nee" value="Nee"></v-radio>
+    </v-radio-group>
+    <v-select
       v-model="damage.type"
-      class="mt-2"
       variant="underlined"
-      clearable
-      hide-details="auto"
+      :items="[
+        'Moedwillig',
+        'Slijtage',
+        'Geweld',
+        'Normaal gebruik',
+        'Calamiteit',
+        'Anders',
+      ]"
       label="Soort schade:"
-    ></v-text-field>
-    <v-menu
-      ref="menu1"
-      v-model="menu1"
-      :close-on-content-click="false"
-      transition="scale-transition"
-      offset-y
-      max-width="290px"
-      min-width="290px"
-    >
-      <template v-slot:activator="{ on, attrs }">
-        <v-text-field
-          v-model="dateFormatted"
-          label="Date"
-          hint="MM/DD/YYYY format"
-          persistent-hint
-          prepend-icon="event"
-          v-bind="attrs"
-          @blur="date = parseDate(dateFormatted)"
-          v-on="on"
-        ></v-text-field>
-      </template>
-      <v-date-picker
-        v-model="date"
-        no-title
-        @input="menu1 = false"
-      ></v-date-picker>
-    </v-menu>
+    ></v-select>
     <v-text-field
-      v-model="damage.immediateAction"
+      v-model="damage.date"
       class="mt-2"
+      type="date"
       variant="underlined"
       clearable
       hide-details="auto"
-      label="Acute actie vereist:"
+      label="Datum:"
     ></v-text-field>
+    <v-radio-group inline v-model="damage.immediateAction" class="mt-2">
+      <v-list-item-subtitle class="mt-3"
+        >Acute actie vereist:</v-list-item-subtitle
+      >
+      <v-radio label="Ja" value="Ja"></v-radio>
+      <v-radio label="Nee" value="Nee"></v-radio>
+    </v-radio-group>
     <v-text-field
       v-model="damage.description"
-      class="mt-2"
       variant="underlined"
       clearable
       hide-details="auto"
@@ -73,7 +55,6 @@
         v-for="image in damage.images"
         :key="image.id"
         :src="getNewDamageUrl(inspection.id, damage.id, image.id, image.img)"
-        :alt="damage.id"
         class="img-fluid ma-2"
         aspect-ratio="1/1"
         width="50%"
@@ -81,15 +62,15 @@
       </v-img>
       <v-card>
         <v-img
-          v-for="(item, index) in images"
-          :key="index"
+          v-for="(item, subindex) in damage.imagesNew"
+          :key="subindex"
           :src="item"
           class="img-fluid ma-2"
           aspect-ratio="1/1"
           width="50%"
         >
           <v-icon
-            @click="deleteImage(index)"
+            @click="deleteImage(index, subindex)"
             size="x-large"
             color="accent"
             icon="mdi-delete"
@@ -97,15 +78,13 @@
         </v-img>
       </v-card>
       <v-file-input
-        v-model="imageNew"
         accept="image/png, image/jpeg, image/bmp, image/jpg"
         placeholder="Kies een afbeelding"
         prepend-icon="mdi-camera"
         variant="underlined"
         class="mt-2"
         clearable
-        @change="selectImage"
-        @click:clear="clear()"
+        @change="selectImage($event, index)"
         label="Kies een afbeelding"
       ></v-file-input>
     </v-card>
@@ -121,12 +100,6 @@ export default {
   data() {
     return {
       imagePreview: "",
-      data: (vm) => ({
-        date: new Date().toISOString().substr(0, 10),
-        dateFormatted: vm.formatDate2(new Date().toISOString().substr(0, 10)),
-        menu1: false,
-        menu2: false,
-      }),
     };
   },
   mixins: [mixins],
@@ -136,19 +109,7 @@ export default {
       const options = { year: "numeric", month: "long", day: "numeric" };
       return date.toLocaleDateString("nl-NL", options);
     },
-    formatDate2(date) {
-      if (!date) return null;
-
-      const [year, month, day] = date.split("-");
-      return `${month}/${day}/${year}`;
-    },
-    parseDate(date) {
-      if (!date) return null;
-
-      const [month, day, year] = date.split("/");
-      return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
-    },
-    async selectImage(e) {
+    async selectImage(e, index) {
       const file = e.target.files[0];
       if (!file) return;
       const readData = (f) =>
@@ -158,24 +119,22 @@ export default {
           reader.readAsDataURL(f);
         });
       const data = await readData(file);
-      this.$store.commit("addImage", data);
-      console.log(this.images);
+      const inspectionIndex = this.inspectionsIndex;
+      this.$store.commit("addImageDamage", { inspectionIndex, index, data });
     },
-    deleteImage(index) {
-      this.images.splice(index, 1);
+    deleteImage(indexDamageRecords, indexNewImages) {
+      const inspectionIndex = this.inspectionsIndex;
+      this.$store.commit("deleteImageDamage", {
+        inspectionIndex,
+        indexDamageRecords,
+        indexNewImages,
+      });
     },
   },
   computed: {
-    images() {
-      return this.$store.state.images;
-    },
-    computedDateFormatted() {
-      return this.formatDate(this.date);
+    inspectionsIndex() {
+      return this.$store.getters.getIndexById(this.inspection.id);
     },
   },
-  watch: {
-      date (val) {
-        this.dateFormatted = this.formatDate(this.date)
-      }}
 };
 </script>

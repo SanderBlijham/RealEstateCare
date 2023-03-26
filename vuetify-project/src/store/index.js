@@ -8,7 +8,6 @@ export default createStore({
   state: {
     inspectionsData: [],
     errors: [],
-    images: [],
   },
   mutations: {
     SET_INSPECTIONS(state, payload) {
@@ -17,8 +16,57 @@ export default createStore({
     ADD_ERROR(state, payload) {
       state.errors = [...state.errors, payload];
     },
-    addImage(state, images) {
-      state.images.push(images);
+    addImageDamage(state, { inspectionIndex, index, data }) {
+      state.inspectionsData[inspectionIndex].damageRecords[
+        index
+      ].imagesNew.push(data);
+    },
+    addImageMaintenance(state, { inspectionIndex, index, data }) {
+      state.inspectionsData[inspectionIndex].overdueMaintenanceRecords[
+        index
+      ].imagesNew.push(data);
+    },
+    addImageTechnical(state, { inspectionIndex, index, data }) {
+      state.inspectionsData[inspectionIndex].technicalInstallationInspections[
+        index
+      ].imagesNew.push(data);
+    },
+    addImageModifications(state, { inspectionIndex, index, data }) {
+      state.inspectionsData[inspectionIndex].identifyModifications[
+        index
+      ].imagesNew.push(data);
+    },
+    deleteImageDamage(
+      state,
+      { inspectionIndex, indexDamageRecords, indexNewImages }
+    ) {
+      state.inspectionsData[inspectionIndex].damageRecords[
+        indexDamageRecords
+      ].imagesNew.splice(indexNewImages, 1);
+    },
+    deleteImageMaintenance(
+      state,
+      { inspectionIndex, indexDamageRecords, indexNewImages }
+    ) {
+      state.inspectionsData[inspectionIndex].overdueMaintenanceRecords[
+        indexDamageRecords
+      ].imagesNew.splice(indexNewImages, 1);
+    },
+    deleteImageTechnical(
+      state,
+      { inspectionIndex, indexDamageRecords, indexNewImages }
+    ) {
+      state.inspectionsData[inspectionIndex].technicalInstallationInspections[
+        indexDamageRecords
+      ].imagesNew.splice(indexNewImages, 1);
+    },
+    deleteImageModifications(
+      state,
+      { inspectionIndex, indexDamageRecords, indexNewImages }
+    ) {
+      state.inspectionsData[inspectionIndex].identifyModifications[
+        indexDamageRecords
+      ].imagesNew.splice(indexNewImages, 1);
     },
   },
   actions: {
@@ -38,6 +86,14 @@ export default createStore({
           context.commit("ADD_ERROR", error);
           context.commit("SET_INSPECTIONS", []);
         });
+    },
+  },
+  getters: {
+    getIndexById: (state) => (id) => {
+      const index = state.inspectionsData.findIndex(
+        (inspection) => inspection.id === id
+      );
+      return index;
     },
   },
   plugins: [createPersistedState()],

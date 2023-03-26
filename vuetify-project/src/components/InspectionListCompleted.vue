@@ -142,10 +142,6 @@ export default {
       selectedInspectionIndex: 0,
     };
   },
-  mounted() {
-    this.$store.dispatch("fetchInspection");
-    console.log(this.inspectionsData);
-  },
   methods: {
     selectInspection(index) {
       this.selectedInspectionIndex = index;
