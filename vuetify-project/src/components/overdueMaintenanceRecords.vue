@@ -104,12 +104,15 @@ export default {
         });
       const data = await readData(file);
       const inspectionIndex = this.inspectionsIndex;
-      this.$store.commit("addImageMaintenance", { inspectionIndex, index, data });
+      const table = 'overdueMaintenanceRecords';
+      this.$store.commit("addImage", { inspectionIndex, table, index, data });
     },
     deleteImage(indexDamageRecords, indexNewImages) {
       const inspectionIndex = this.inspectionsIndex;
-      this.$store.commit("deleteImageMaintenance", {
+      const table = 'overdueMaintenanceRecords';
+      this.$store.commit("deleteImage", {
         inspectionIndex,
+        table,
         indexDamageRecords,
         indexNewImages,
       });

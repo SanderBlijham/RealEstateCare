@@ -55,7 +55,6 @@
         v-for="image in damage.images"
         :key="image.id"
         :src="getNewDamageUrl(inspection.id, damage.id, image.id, image.img)"
-        :alt="damage.id"
         class="img-fluid ma-2"
         aspect-ratio="1/1"
         width="50%"
@@ -121,12 +120,15 @@ export default {
         });
       const data = await readData(file);
       const inspectionIndex = this.inspectionsIndex;
-      this.$store.commit("addImageTechnical", { inspectionIndex, index, data });
+      const table = 'technicalInstallationInspections';
+      this.$store.commit("addImage", { inspectionIndex, table, index, data });
     },
     deleteImage(indexDamageRecords, indexNewImages) {
       const inspectionIndex = this.inspectionsIndex;
-      this.$store.commit("deleteImageTechnical", {
+      const table = 'technicalInstallationInspections';
+      this.$store.commit("deleteImage", {
         inspectionIndex,
+        table,
         indexDamageRecords,
         indexNewImages,
       });

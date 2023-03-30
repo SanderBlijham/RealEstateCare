@@ -16,57 +16,22 @@ export default createStore({
     ADD_ERROR(state, payload) {
       state.errors = [...state.errors, payload];
     },
-    addImageDamage(state, { inspectionIndex, index, data }) {
-      state.inspectionsData[inspectionIndex].damageRecords[
-        index
-      ].imagesNew.push(data);
+    addImage(state, { inspectionIndex, table, index, data }) {
+      state.inspectionsData[inspectionIndex][table][index].imagesNew.push(data);
     },
-    addImageMaintenance(state, { inspectionIndex, index, data }) {
-      state.inspectionsData[inspectionIndex].overdueMaintenanceRecords[
-        index
-      ].imagesNew.push(data);
-    },
-    addImageTechnical(state, { inspectionIndex, index, data }) {
-      state.inspectionsData[inspectionIndex].technicalInstallationInspections[
-        index
-      ].imagesNew.push(data);
-    },
-    addImageModifications(state, { inspectionIndex, index, data }) {
-      state.inspectionsData[inspectionIndex].identifyModifications[
-        index
-      ].imagesNew.push(data);
-    },
-    deleteImageDamage(
+    deleteImage(
       state,
-      { inspectionIndex, indexDamageRecords, indexNewImages }
+      { inspectionIndex, table, indexDamageRecords, indexNewImages }
     ) {
-      state.inspectionsData[inspectionIndex].damageRecords[
+      state.inspectionsData[inspectionIndex][table][
         indexDamageRecords
       ].imagesNew.splice(indexNewImages, 1);
     },
-    deleteImageMaintenance(
-      state,
-      { inspectionIndex, indexDamageRecords, indexNewImages }
-    ) {
-      state.inspectionsData[inspectionIndex].overdueMaintenanceRecords[
-        indexDamageRecords
-      ].imagesNew.splice(indexNewImages, 1);
+    addPDF(state, { inspectionIndex, table, index, name, url }) {
+      state.inspectionsData[inspectionIndex][table][index].pdfsNew.push({name, url});
     },
-    deleteImageTechnical(
-      state,
-      { inspectionIndex, indexDamageRecords, indexNewImages }
-    ) {
-      state.inspectionsData[inspectionIndex].technicalInstallationInspections[
-        indexDamageRecords
-      ].imagesNew.splice(indexNewImages, 1);
-    },
-    deleteImageModifications(
-      state,
-      { inspectionIndex, indexDamageRecords, indexNewImages }
-    ) {
-      state.inspectionsData[inspectionIndex].identifyModifications[
-        indexDamageRecords
-      ].imagesNew.splice(indexNewImages, 1);
+    deletePDF(state, { inspectionIndex, table, index, indexNewPDF }) {
+      state.inspectionsData[inspectionIndex][table][index].pdfsNew.splice(indexNewPDF, 1);
     },
   },
   actions: {

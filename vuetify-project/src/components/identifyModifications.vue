@@ -1,5 +1,8 @@
 <template>
-  <v-list v-for="(damage, index) in inspection.identifyModifications" :key="damage.id">
+  <v-list
+    v-for="(damage, index) in inspection.identifyModifications"
+    :key="damage.id"
+  >
     <v-text-field
       v-model="damage.place"
       class="mt-2"
@@ -46,12 +49,28 @@
         {{ damage.existing }}
       </a>
     </div>
+    <div v-for="(pdf, indexPDF) in damage.pdfsNew" :key="indexPDF">
+      <v-btn class="mt-2" :href="pdf.url" variant="plain">{{ pdf.name }}</v-btn>
+      <v-icon
+        @click="deletePDF(index, indexPDF)"
+        size="x-large"
+        color="accent"
+        icon="mdi-delete"
+      ></v-icon>
+    </div>
+    <v-file-input
+      placeholder="Upload PDF"
+      variant="underlined"
+      class="mt-2"
+      clearable
+      label="Upload PDF"
+      @change="handleFileUpload($event, index)"
+    ></v-file-input>
     <v-card>
       <v-img
         v-for="image in damage.images"
         :key="image.id"
         :src="getNewDamageUrl(inspection.id, damage.id, image.id, image.img)"
-        :alt="damage.id"
         class="img-fluid ma-2"
         aspect-ratio="1/1"
         width="50%"
@@ -95,9 +114,7 @@ export default {
   name: "identifyModifications",
   props: ["inspection"],
   data() {
-    return {
-      imagePreview: "",
-    };
+    return {};
   },
   mixins: [mixins],
   methods: {
@@ -117,14 +134,44 @@ export default {
         });
       const data = await readData(file);
       const inspectionIndex = this.inspectionsIndex;
-      this.$store.commit("addImageModifications", { inspectionIndex, index, data });
+      const table = "identifyModifications";
+      this.$store.commit("addImage", { inspectionIndex, table, index, data });
     },
     deleteImage(indexDamageRecords, indexNewImages) {
       const inspectionIndex = this.inspectionsIndex;
-      this.$store.commit("deleteImageModifications", {
+      const table = "identifyModifications";
+      this.$store.commit("deleteImage", {
         inspectionIndex,
+        table,
         indexDamageRecords,
         indexNewImages,
+      });
+    },
+    handleFileUpload(event, index) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        const inspectionIndex = this.inspectionsIndex;
+        const table = "identifyModifications";
+        const url = URL.createObjectURL(file);
+        this.$store.commit("addPDF", {
+          inspectionIndex,
+          table,
+          index,
+          name: file.name,
+          url,
+        });
+      };
+      reader.readAsArrayBuffer(file);
+    },
+    deletePDF(index, indexNewPDF) {
+      const inspectionIndex = this.inspectionsIndex;
+      const table = "identifyModifications";
+      this.$store.commit("deletePDF", {
+        inspectionIndex,
+        table,
+        index,
+        indexNewPDF,
       });
     },
   },
