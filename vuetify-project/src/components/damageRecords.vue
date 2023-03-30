@@ -129,13 +129,13 @@ export default {
       const table = "damageRecords"
       this.$store.commit("addImage", {inspectionIndex, table, index, data});
     },
-    deleteImage(indexDamageRecords, indexNewImages) {
+    deleteImage(index, indexNewImages) {
       const inspectionIndex = this.inspectionsIndex;
       const table = "damageRecords";
       this.$store.commit("deleteImage", {
         inspectionIndex,
         table,
-        indexDamageRecords,
+        index,
         indexNewImages,
       });
     },

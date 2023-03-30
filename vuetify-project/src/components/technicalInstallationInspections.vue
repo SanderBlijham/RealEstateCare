@@ -11,14 +11,18 @@
       hide-details="auto"
       label="Locatie"
     ></v-text-field>
-    <v-text-field
+    <v-select
       v-model="damage.type"
-      class="mt-2"
       variant="underlined"
-      clearable
-      hide-details="auto"
-      label="Soort schade:"
-    ></v-text-field>
+      :items="[
+        'Koeling',
+        'Verwarming',
+        'Luchtverversing',
+        'Elektra',
+        'Beveiliging',
+      ]"
+      label="Soort installatie:"
+    ></v-select>
     <v-text-field
       v-model="damage.reportedMalfunction"
       class="mt-2"
@@ -27,21 +31,18 @@
       hide-details="auto"
       label="Gemelde storingen:"
     ></v-text-field>
-    <v-text-field
-      v-model="damage.approved"
-      class="mt-2"
-      variant="underlined"
-      clearable
-      hide-details="auto"
-      label="Goedgekeurd:"
-    ></v-text-field>
+    <v-radio-group inline v-model="damage.approved" class="mt-2">
+      <v-list-item-subtitle class="mt-3">Goedgekeurd:</v-list-item-subtitle>
+      <v-radio label="Ja" value="Ja"></v-radio>
+      <v-radio label="Nee" value="Nee"></v-radio>
+    </v-radio-group>
     <v-text-field
       v-model="damage.description"
       class="mt-2"
       variant="underlined"
       clearable
       hide-details="auto"
-      label="Omschrijving:"
+      label="Opmerkingen:"
     ></v-text-field>
     <div class="div">
       Test procedure:
@@ -49,7 +50,23 @@
         {{ damage.test }}
       </a>
     </div>
-
+    <div v-for="(pdf, indexPDF) in damage.pdfsNew" :key="indexPDF">
+      <v-btn class="mt-2" :href="pdf.url" variant="plain">{{ pdf.name }}</v-btn>
+      <v-icon
+        @click="deletePDF(index, indexPDF)"
+        size="x-large"
+        color="accent"
+        icon="mdi-delete"
+      ></v-icon>
+    </div>
+    <v-file-input
+      placeholder="Upload PDF"
+      variant="underlined"
+      class="mt-2"
+      clearable
+      label="Upload PDF"
+      @change="handleFileUpload($event, index)"
+    ></v-file-input>
     <v-card>
       <v-img
         v-for="image in damage.images"
@@ -120,17 +137,44 @@ export default {
         });
       const data = await readData(file);
       const inspectionIndex = this.inspectionsIndex;
-      const table = 'technicalInstallationInspections';
+      const table = "technicalInstallationInspections";
       this.$store.commit("addImage", { inspectionIndex, table, index, data });
     },
-    deleteImage(indexDamageRecords, indexNewImages) {
+    deleteImage(index, indexNewImages) {
       const inspectionIndex = this.inspectionsIndex;
-      const table = 'technicalInstallationInspections';
+      const table = "technicalInstallationInspections";
       this.$store.commit("deleteImage", {
         inspectionIndex,
         table,
-        indexDamageRecords,
+        index,
         indexNewImages,
+      });
+    },
+    handleFileUpload(event, index) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        const inspectionIndex = this.inspectionsIndex;
+        const table = "technicalInstallationInspections";
+        const url = URL.createObjectURL(file);
+        this.$store.commit("addPDF", {
+          inspectionIndex,
+          table,
+          index,
+          name: file.name,
+          url,
+        });
+      };
+      reader.readAsArrayBuffer(file);
+    },
+    deletePDF(index, indexNewPDF) {
+      const inspectionIndex = this.inspectionsIndex;
+      const table = "technicalInstallationInspections";
+      this.$store.commit("deletePDF", {
+        inspectionIndex,
+        table,
+        index,
+        indexNewPDF,
       });
     },
   },

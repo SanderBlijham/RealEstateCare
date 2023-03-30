@@ -11,33 +11,34 @@
       hide-details="auto"
       label="Locatie aangetroffen modificatie:"
     ></v-text-field>
-    <v-text-field
+    <v-select
       v-model="damage.executed"
       class="mt-2"
       variant="underlined"
-      clearable
-      hide-details="auto"
+      :items="['Huurder', 'Aannemer', 'Onbekend']"
       label="Uitgevoerd door:"
-    ></v-text-field>
+    ></v-select>
     <v-text-field
       v-model="damage.descriptionModification"
-      class="mt-2"
       variant="underlined"
       clearable
       hide-details="auto"
       label="Beschrijving modificatie:"
     ></v-text-field>
-    <v-text-field
+    <v-select
       v-model="damage.action"
       class="mt-2"
       variant="underlined"
-      clearable
-      hide-details="auto"
+      :items="[
+        'Accepteren',
+        'Laten keuren',
+        'Laten verwijderen',
+        'laten aanpassen en keuren',
+      ]"
       label="Te ondernemen actie:"
-    ></v-text-field>
+    ></v-select>
     <v-text-field
       v-model="damage.description"
-      class="mt-2"
       variant="underlined"
       clearable
       hide-details="auto"
@@ -137,13 +138,13 @@ export default {
       const table = "identifyModifications";
       this.$store.commit("addImage", { inspectionIndex, table, index, data });
     },
-    deleteImage(indexDamageRecords, indexNewImages) {
+    deleteImage(index, indexNewImages) {
       const inspectionIndex = this.inspectionsIndex;
       const table = "identifyModifications";
       this.$store.commit("deleteImage", {
         inspectionIndex,
         table,
-        indexDamageRecords,
+        index,
         indexNewImages,
       });
     },

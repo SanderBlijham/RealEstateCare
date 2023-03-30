@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '@/views/HomePage.vue'
 import CompletedInspections from '@/views/CompletedInspections.vue'
 import OpenInspections from '@/views/OpenInspections.vue'
+import Settings from '@/views/SettingsPage.vue'
 
 const routes = [
   {
@@ -20,6 +21,11 @@ const routes = [
     path: '/scheduled',
     name: 'scheduled',
     component: OpenInspections,
+  },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: Settings,
   },
 ]
 

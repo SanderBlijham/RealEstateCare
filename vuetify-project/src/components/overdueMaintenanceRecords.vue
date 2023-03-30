@@ -8,37 +8,39 @@
       hide-details="auto"
       label="Locatie"
     ></v-text-field>
-    <v-text-field
+    <v-select
       v-model="damage.type"
       class="mt-2"
       variant="underlined"
-      clearable
-      hide-details="auto"
-      label="Soort schade:"
-    ></v-text-field>
-    <v-text-field
-      v-model="damage.immediateAction"
-      class="mt-2"
+      :items="[
+        'Schilderwerk',
+        'Houtrot',
+        'Elektra',
+        'Leidingwerk',
+        'Beglazing',
+      ]"
+      label="Soort installatie:"
+    ></v-select>
+    <v-radio-group inline v-model="damage.immediateAction" class="mt-2">
+      <v-list-item-subtitle class="mt-3">Acute actie vereist:</v-list-item-subtitle>
+      <v-radio label="Ja" value="Ja"></v-radio>
+      <v-radio label="Nee" value="Nee"></v-radio>
+    </v-radio-group>
+    <v-select
+    v-model="damage.costIndication"
       variant="underlined"
-      clearable
-      hide-details="auto"
-      label="Acute actie vereist:"
-    ></v-text-field>
-    <v-text-field
-      v-model="damage.costIndication"
-      class="mt-2"
-      variant="underlined"
-      clearable
-      hide-details="auto"
+      :items="[
+        '0-500',
+        '500-1500',
+        '1500+'
+      ]"
       label="Kostenindicatie:"
-    ></v-text-field>
-
+    ></v-select>
     <v-card>
       <v-img
         v-for="image in damage.images"
         :key="image.id"
         :src="getNewDamageUrl(inspection.id, damage.id, image.id, image.img)"
-        :alt="damage.id"
         class="img-fluid ma-2"
         aspect-ratio="1/1"
         width="50%"
@@ -107,13 +109,13 @@ export default {
       const table = 'overdueMaintenanceRecords';
       this.$store.commit("addImage", { inspectionIndex, table, index, data });
     },
-    deleteImage(indexDamageRecords, indexNewImages) {
+    deleteImage(index, indexNewImages) {
       const inspectionIndex = this.inspectionsIndex;
       const table = 'overdueMaintenanceRecords';
       this.$store.commit("deleteImage", {
         inspectionIndex,
         table,
-        indexDamageRecords,
+        index,
         indexNewImages,
       });
     },

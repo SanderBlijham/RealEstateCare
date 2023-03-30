@@ -119,6 +119,18 @@
           </v-expansion-panel>
         </v-expansion-panels>
       </v-card>
+      <router-link to="scheduled" class="text-decoration-none">
+        <v-btn
+          type="submit"
+          block
+          class="mt-2"
+          color="primary"
+          prepend-icon="mdi-arrow-left"
+          v-if="selectedInspection"
+          @click="toggleIsCompleted"
+          >Wijzigen</v-btn
+        ></router-link
+      >
     </v-col>
   </v-row>
 </template>
@@ -150,6 +162,10 @@ export default {
       const date = new Date(dateString);
       const options = { year: "numeric", month: "long", day: "numeric" };
       return date.toLocaleDateString("nl-NL", options);
+    },
+    toggleIsCompleted() {
+      this.inspectionsData[this.selectedInspectionIndex].completed =
+        !this.inspectionsData[this.selectedInspectionIndex].completed;
     },
   },
   computed: {

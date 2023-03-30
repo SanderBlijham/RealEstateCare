@@ -21,10 +21,10 @@ export default createStore({
     },
     deleteImage(
       state,
-      { inspectionIndex, table, indexDamageRecords, indexNewImages }
+      { inspectionIndex, table, index, indexNewImages }
     ) {
       state.inspectionsData[inspectionIndex][table][
-        indexDamageRecords
+        index
       ].imagesNew.splice(indexNewImages, 1);
     },
     addPDF(state, { inspectionIndex, table, index, name, url }) {
