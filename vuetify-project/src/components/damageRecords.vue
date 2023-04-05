@@ -1,5 +1,6 @@
 <template>
   <v-list v-for="(damage, index) in inspection.damageRecords" :key="damage.id">
+    <v-list-item-title> Inspectie {{ damage.id }} </v-list-item-title>
     <v-text-field
       v-model="damage.location"
       class="mt-2"
@@ -52,17 +53,7 @@
       label="Omschrijving:"
     ></v-text-field>
 
-    <v-card>
-      <v-img
-        v-for="image in damage.images"
-        :key="image.id"
-        :src="getNewDamageUrl(inspection.id, damage.id, image.id, image.img)"
-        class="img-fluid ma-2"
-        aspect-ratio="1/1"
-        width="50%"
-      >
-      </v-img>
-      <v-card>
+    <v-card variant="text">
         <v-img
           v-for="(item, subindex) in damage.imagesNew"
           :key="subindex"
@@ -78,7 +69,6 @@
             icon="mdi-delete"
           ></v-icon>
         </v-img>
-      </v-card>
       <v-file-input
         accept="image/png, image/jpeg, image/bmp, image/jpg"
         placeholder="Kies een afbeelding"

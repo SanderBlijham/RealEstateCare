@@ -44,12 +44,6 @@
       hide-details="auto"
       label="Opmerkingen:"
     ></v-text-field>
-    <div class="div">
-      Bestaande situaties en reeds gedocumenteerde modificaties:
-      <a :href="getPDFMods(inspection.id, damage.existing)" download>
-        {{ damage.existing }}
-      </a>
-    </div>
     <div v-for="(pdf, indexPDF) in damage.pdfsNew" :key="indexPDF">
       <v-btn class="mt-2" :href="pdf.url" variant="plain">{{ pdf.name }}</v-btn>
       <v-icon
@@ -62,27 +56,17 @@
     <v-file-input
       placeholder="Upload PDF"
       variant="underlined"
-      class="mt-2"
+      class="mt-5"
       clearable
       label="Upload PDF"
       @change="handleFileUpload($event, index)"
     ></v-file-input>
     <v-card>
-      <v-img
-        v-for="image in damage.images"
-        :key="image.id"
-        :src="getNewDamageUrl(inspection.id, damage.id, image.id, image.img)"
-        class="img-fluid ma-2"
-        aspect-ratio="1/1"
-        width="50%"
-      >
-      </v-img>
-      <v-card>
         <v-img
           v-for="(item, subindex) in damage.imagesNew"
           :key="subindex"
           :src="item"
-          class="img-fluid ma-2"
+          class="img-fluid ma-2 mb-5"
           aspect-ratio="1/1"
           width="50%"
         >
@@ -93,7 +77,6 @@
             icon="mdi-delete"
           ></v-icon>
         </v-img>
-      </v-card>
       <v-file-input
         accept="image/png, image/jpeg, image/bmp, image/jpg"
         placeholder="Kies een afbeelding"

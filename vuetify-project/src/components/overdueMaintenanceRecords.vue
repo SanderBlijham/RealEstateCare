@@ -36,22 +36,12 @@
       ]"
       label="Kostenindicatie:"
     ></v-select>
-    <v-card>
-      <v-img
-        v-for="image in damage.images"
-        :key="image.id"
-        :src="getNewDamageUrl(inspection.id, damage.id, image.id, image.img)"
-        class="img-fluid ma-2"
-        aspect-ratio="1/1"
-        width="50%"
-      >
-      </v-img>
-      <v-card>
+    <v-card variant="text">
         <v-img
         v-for="(item, subindex) in damage.imagesNew"
           :key="subindex"
           :src="item"
-          class="img-fluid ma-2"
+          class="img-fluid ma-2 mb-5"
           aspect-ratio="1/1"
           width="50%"
         >
@@ -62,7 +52,6 @@
             icon="mdi-delete"
           ></v-icon>
         </v-img>
-      </v-card>
       <v-file-input
         accept="image/png, image/jpeg, image/bmp, image/jpg"
         placeholder="Kies een afbeelding"
@@ -85,7 +74,6 @@ export default {
   props: ["inspection"],
   data() {
     return {
-      imagePreview: ""
     };
   },
   mixins: [mixins],

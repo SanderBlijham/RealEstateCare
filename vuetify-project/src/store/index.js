@@ -8,6 +8,7 @@ export default createStore({
   state: {
     inspectionsData: [],
     errors: [],
+    username: ''
   },
   mutations: {
     SET_INSPECTIONS(state, payload) {
@@ -33,6 +34,9 @@ export default createStore({
     deletePDF(state, { inspectionIndex, table, index, indexNewPDF }) {
       state.inspectionsData[inspectionIndex][table][index].pdfsNew.splice(indexNewPDF, 1);
     },
+    username (state,name) {
+      state.username = name;
+    }
   },
   actions: {
     fetchInspection(context) {
@@ -52,6 +56,10 @@ export default createStore({
           context.commit("SET_INSPECTIONS", []);
         });
     },
+    update_user_name(store,name)
+    {
+      store.commit('username',name);
+    }  
   },
   getters: {
     getIndexById: (state) => (id) => {
