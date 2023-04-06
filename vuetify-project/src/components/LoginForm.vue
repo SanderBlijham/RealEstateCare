@@ -32,15 +32,15 @@
         >Inloggen</v-btn
       >
     </v-list>
-    <Loading v-if="loading"></Loading>
+    <loading-component v-if="loading"></loading-component>
   </v-container>
 </template>
 
 <script>
-import Loading from "./LoadingComponent.vue";
+import LoadingComponent from "./LoadingComponent.vue";
 export default {
   name: "LoginForm",
-  components: { Loading },
+  components: { LoadingComponent },
   data() {
     return {
       loading: false,

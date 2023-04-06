@@ -48,7 +48,7 @@
             >
 
             <v-expansion-panel-text>
-              <damageRecords
+              <damage-records
                 v-if="selectedInspection"
                 :inspection="selectedInspection"
               />
@@ -70,7 +70,7 @@
               >Achterstallig onderhoud</v-expansion-panel-title
             >
             <v-expansion-panel-text>
-              <overdueMaintenanceRecords
+              <overdue-maintenance-records
                 v-if="selectedInspection"
                 :inspection="selectedInspection"
               />
@@ -94,7 +94,7 @@
               >Technische installaties inspecteren</v-expansion-panel-title
             >
             <v-expansion-panel-text>
-              <technicalInstallationInspections
+              <technical-installation-inspections
                 v-if="selectedInspection"
                 :inspection="selectedInspection"
               />
@@ -116,7 +116,7 @@
               >Modificaties identificeren</v-expansion-panel-title
             >
             <v-expansion-panel-text>
-              <identifyModifications
+              <identify-modifications
                 v-if="selectedInspection"
                 :inspection="selectedInspection"
               />
@@ -141,18 +141,18 @@
 </template>
 
 <script>
-import damageRecords from "./damageRecords";
-import overdueMaintenanceRecords from "./overdueMaintenanceRecords";
-import technicalInstallationInspections from "./technicalInstallationInspections";
-import identifyModifications from "./identifyModifications";
+import DamageRecords from "./DamageRecords";
+import OverdueMaintenanceRecords from "./OverdueMaintenanceRecords";
+import TechnicalInstallationInspections from "./TechnicalInstallationInspections";
+import IdentifyModifications from "./IdentifyModifications";
 
 export default {
   name: "InspectionList",
   components: {
-    damageRecords,
-    overdueMaintenanceRecords,
-    technicalInstallationInspections,
-    identifyModifications,
+    DamageRecords,
+    OverdueMaintenanceRecords,
+    TechnicalInstallationInspections,
+    IdentifyModifications,
   },
   data() {
     return {
