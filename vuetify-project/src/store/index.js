@@ -8,7 +8,6 @@ export default createStore({
   state: {
     inspectionsData: [],
     errors: [],
-    username: ''
   },
   mutations: {
     SET_INSPECTIONS(state, payload) {
@@ -56,10 +55,6 @@ export default createStore({
           context.commit("SET_INSPECTIONS", []);
         });
     },
-    update_user_name(store,name)
-    {
-      store.commit('username',name);
-    }  
   },
   getters: {
     getIndexById: (state) => (id) => {

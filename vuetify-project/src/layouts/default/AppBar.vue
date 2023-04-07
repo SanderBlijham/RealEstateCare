@@ -32,11 +32,8 @@ export default {
   },
   methods: {
     logout: function () {
-      // use vuex to store user inforamtion
-      this.$store.dispatch("update_user_name", this.username);
-
       // save login status in localstorage
-      localStorage.removeItem("login");
+      localStorage.removeItem("authenticated");
 
       // redirect to user page
       this.$router.push("/Login");

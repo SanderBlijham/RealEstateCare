@@ -13,6 +13,7 @@
         hide-details="auto"
         label="Gebruikersnaam"
         type="text"
+        required
       ></v-text-field>
       <v-text-field
         v-model="password"
@@ -21,6 +22,17 @@
         hide-details="auto"
         label="Wachtwoord"
         type="password"
+        required
+      ></v-text-field>
+      <v-text-field
+        v-if="twoFactorEnabled"
+        v-model="twoFactorCode"
+        class="mt-2"
+        variant="underlined"
+        hide-details="auto"
+        label="2FA code"
+        type="2FA code"
+        required
       ></v-text-field>
       <v-btn
         type="submit"
@@ -38,49 +50,59 @@
 
 <script>
 import LoadingComponent from "./LoadingComponent.vue";
+
 export default {
   name: "LoginForm",
   components: { LoadingComponent },
   data() {
     return {
-      loading: false,
       username: "",
       password: "",
+      twoFactorCode: "",
+      twoFactorSecret: "",
+      twoFactorEnabled: false,
+      loading: false,
     };
   },
+
   methods: {
-    login: function () {
-      // should be replaced by real login code
-      // there I just did some simple validation and use a fake login
-      if (this.username != "" && this.password != "") {
-        // show the loading message
-        this.loading = true;
-        setTimeout(() => {
-          this.loading = false;
-
-          // use vuex to store user inforamtion
-          this.$store.dispatch("update_user_name", this.username);
-
-          // save login status in localstorage
-          localStorage.setItem("login", true);
-
-          // redirect to user page
-          this.$router.push("/");
-        }, 1000);
+    login() {
+      // Check if 2FA is enabled and verify the code if it is
+      if (this.twoFactorEnabled) {
+        const secret = localStorage.getItem("twoFactorSecret");
+        const token = 123456;
+        if (this.twoFactorSecret === secret && this.twoFactorCode == token) {
+          // Check if the username and password match the stored values
+          const storedUsername = localStorage.getItem("username");
+          const storedPassword = localStorage.getItem("password");
+          if (
+            this.username === storedUsername &&
+            this.password === storedPassword
+          ) {
+            localStorage.setItem("authenticated", true);
+            // show the loading message
+            this.loading = true;
+            setTimeout(() => {
+              this.loading = false;
+              this.$router.push("/");
+            }, 1000);
+          } else {
+            alert("Incorrect username or password!");
+          }
+        } else {
+          alert("Invalid 2FA code!");
+          return;
+        }
       }
     },
   },
+  created() {
+    // Check if the user has set up 2FA before
+    const twoFactorSecret = localStorage.getItem("twoFactorSecret");
+    if (twoFactorSecret) {
+      this.twoFactorSecret = twoFactorSecret;
+      this.twoFactorEnabled = true;
+    }
+  },
 };
 </script>
-
-<style>
-.d-flex {
-  display: flex;
-}
-.justify-center {
-  justify-content: center;
-}
-.align-center {
-  align-items: center;
-}
-</style>
