@@ -22,7 +22,7 @@ window.Buffer = Buffer;
 
 const app = createApp(App)
 
-app.config.productionTip = false
+app.config.productionTip = true
 
 registerPlugins(app)
 

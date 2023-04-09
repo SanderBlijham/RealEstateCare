@@ -19,7 +19,7 @@
               </v-card-title>
 
               <h3 class="d-flex justify-center align-center text-logo mt-10">
-                Scheduled
+                Ingeplande inspecties
               </h3>
             </v-card>
           </router-link>
@@ -43,7 +43,7 @@
               </v-card-title>
 
               <h3 class="d-flex justify-center align-center text-logo mt-10">
-                Completed
+                Afgeronde inspecties
               </h3>
             </v-card>
           </router-link>
@@ -67,7 +67,7 @@
               </v-card-title>
 
               <h3 class="d-flex justify-center align-center text-logo mt-10">
-                Knowledge base
+                Kennisbank
               </h3>
             </v-card>
           </router-link>
@@ -91,7 +91,7 @@
               </v-card-title>
 
               <h3 class="d-flex justify-center align-center text-logo mt-10">
-                Settings
+                Profiel
               </h3>
             </v-card>
           </router-link>

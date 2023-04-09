@@ -1,6 +1,6 @@
 // store/index.js
 import { createStore } from "vuex";
-import createPersistedState from "vuex-plugin-persistedstate";
+import createPersistedState from "vuex-persistedstate";
 import EventService from "@/services/EventService";
 import inspectionsDatamodel from "@/models/inspectionsData";
 
@@ -19,23 +19,27 @@ export default createStore({
     addImage(state, { inspectionIndex, table, index, data }) {
       state.inspectionsData[inspectionIndex][table][index].imagesNew.push(data);
     },
-    deleteImage(
-      state,
-      { inspectionIndex, table, index, indexNewImages }
-    ) {
-      state.inspectionsData[inspectionIndex][table][
-        index
-      ].imagesNew.splice(indexNewImages, 1);
+    deleteImage(state, { inspectionIndex, table, index, indexNewImages }) {
+      state.inspectionsData[inspectionIndex][table][index].imagesNew.splice(
+        indexNewImages,
+        1
+      );
     },
     addPDF(state, { inspectionIndex, table, index, name, url }) {
-      state.inspectionsData[inspectionIndex][table][index].pdfsNew.push({name, url});
+      state.inspectionsData[inspectionIndex][table][index].pdfsNew.push({
+        name,
+        url,
+      });
     },
     deletePDF(state, { inspectionIndex, table, index, indexNewPDF }) {
-      state.inspectionsData[inspectionIndex][table][index].pdfsNew.splice(indexNewPDF, 1);
+      state.inspectionsData[inspectionIndex][table][index].pdfsNew.splice(
+        indexNewPDF,
+        1
+      );
     },
-    username (state,name) {
+    username(state, name) {
       state.username = name;
-    }
+    },
   },
   actions: {
     fetchInspection(context) {
@@ -57,12 +61,8 @@ export default createStore({
     },
   },
   getters: {
-    getIndexById: (state) => (id) => {
-      const index = state.inspectionsData.findIndex(
-        (inspection) => inspection.id === id
-      );
-      return index;
-    },
+    getIndexById: (state) => (id) =>
+      state.inspectionsData.findIndex((inspection) => inspection.id === id),
   },
   plugins: [createPersistedState()],
 });

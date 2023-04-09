@@ -4,7 +4,7 @@
       action="/post"
       v-if="!loading"
       class="mx-auto"
-      style="max-width: 33%"
+      style="max-width: 100%"
     >
       <v-text-field
         v-model="username"
@@ -43,6 +43,9 @@
         v-on:click.prevent="login"
         >Inloggen</v-btn
       >
+      <div class="mt-2">
+        <router-link to="/register">Account aanmaken</router-link>
+      </div>
     </v-list>
     <loading-component v-if="loading"></loading-component>
   </v-container>
@@ -67,14 +70,25 @@ export default {
 
   methods: {
     login() {
+      const storedUsername = localStorage.getItem("username");
+      const storedPassword = localStorage.getItem("password");
+
+      if (!storedUsername || !storedPassword) {
+        alert("Gebruikersnaam of wachtwoord onjuist");
+        return;
+      }
+
+      if (this.twoFactorEnabled === false) {
+        alert("2FA niet geactiveerd. Ga naar de registratiepagina en klik op scan QR code");
+        return;
+      }
+
       // Check if 2FA is enabled and verify the code if it is
       if (this.twoFactorEnabled) {
         const secret = localStorage.getItem("twoFactorSecret");
         const token = 123456;
         if (this.twoFactorSecret === secret && this.twoFactorCode == token) {
           // Check if the username and password match the stored values
-          const storedUsername = localStorage.getItem("username");
-          const storedPassword = localStorage.getItem("password");
           if (
             this.username === storedUsername &&
             this.password === storedPassword
@@ -87,7 +101,7 @@ export default {
               this.$router.push("/");
             }, 1000);
           } else {
-            alert("Incorrect username or password!");
+            alert("Gebruikersnaam of wachtwoord onjuist");
           }
         } else {
           alert("Invalid 2FA code!");

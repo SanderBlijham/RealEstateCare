@@ -33,7 +33,11 @@
         >
         <v-expansion-panels variant="default">
           <v-expansion-panel
-            v-if="selectedInspection.damageRecords[0].used === false"
+            v-if="
+              selectedInspection.damageRecords.some(
+                (record) => record.used === false
+              )
+            "
             :disabled="true"
             class="pa-2"
             ><v-expansion-panel-title
@@ -52,7 +56,9 @@
 
           <v-expansion-panel
             v-if="
-              selectedInspection.overdueMaintenanceRecords[0].used === false
+              selectedInspection.overdueMaintenanceRecords.some(
+                (record) => record.used === false
+              )
             "
             :disabled="true"
             class="pa-2"
@@ -75,8 +81,9 @@
 
           <v-expansion-panel
             v-if="
-              selectedInspection.technicalInstallationInspections[0].used ===
-              false
+              selectedInspection.technicalInstallationInspections.some(
+                (record) => record.used === false
+              )
             "
             :disabled="true"
             class="pa-2"
@@ -98,7 +105,11 @@
           </v-expansion-panel>
 
           <v-expansion-panel
-            v-if="selectedInspection.identifyModifications[0].used === false"
+            v-if="
+              selectedInspection.identifyModifications.some(
+                (record) => record.used === false
+              )
+            "
             :disabled="true"
             class="pa-2"
           >
