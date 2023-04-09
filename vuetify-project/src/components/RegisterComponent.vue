@@ -45,24 +45,7 @@
     </v-list>
   </v-container>
 </template>
-<!-- 
-<template>
-  <div>
-    <form @submit.prevent="register">
-      <label>Username:</label>
-      <input type="text" v-model="username" required />
-      <br />
-      <label>Password:</label>
-      <input type="password" v-model="password" required />
-      <br />
-      <div>
-        <button type="button" @click="setup2FA">Set up 2FA</button>
-        <v-img :src="qrCode" width="10%" height="10%" alt="qrCode"></v-img>
-      </div>
-      <button type="submit">Register</button>
-    </form>
-  </div>
-</template> -->
+
 
 <script>
 import { authenticator } from "@otplib/preset-default";
