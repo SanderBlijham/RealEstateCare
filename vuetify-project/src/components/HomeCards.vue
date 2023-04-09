@@ -19,7 +19,7 @@
               </v-card-title>
 
               <h3 class="d-flex justify-center align-center text-logo mt-10">
-                Ingeplande inspecties
+                Ingeplande<br> inspecties
               </h3>
             </v-card>
           </router-link>
@@ -43,7 +43,7 @@
               </v-card-title>
 
               <h3 class="d-flex justify-center align-center text-logo mt-10">
-                Afgeronde inspecties
+                Afgeronde <br> inspecties
               </h3>
             </v-card>
           </router-link>
